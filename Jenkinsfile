@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-        SONAR_TOKEN = credentials('efa59d55668cbf0979e24873d0e81d2cd3e6fad8')
+        SONAR_TOKEN = 'efa59d55668cbf0979e24873d0e81d2cd3e6fad8'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/vasu289/8.2CDevSecOps/'
+                git branch: 'main', url: 'https://github.com/vasu289/8.2CDevSecOps.git'
             }
         }
 
@@ -36,12 +36,15 @@ pipeline {
             }
         }
 
+        stage('Install SonarScanner') {
+            steps {
+                bat 'npm install -g sonarqube-scanner'
+            }
+        }
+
         stage('SonarCloud Analysis') {
             steps {
-                bat '''
-                npm install -g sonarqube-scanner
-                sonar-scanner
-                '''
+                bat 'sonar-scanner -Dsonar.login=%SONAR_TOKEN%'
             }
         }
     }
