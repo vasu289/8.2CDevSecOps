@@ -36,15 +36,12 @@ pipeline {
             }
         }
 
-        stage('Install SonarScanner') {
-            steps {
-                bat 'npm install -g sonarqube-scanner'
-            }
-        }
-
         stage('SonarCloud Analysis') {
             steps {
-                bat 'sonar-scanner -Dsonar.login=%SONAR_TOKEN%'
+                bat '''
+                npm install sonarqube-scanner --save-dev
+                npx sonarqube-scanner
+                '''
             }
         }
     }
